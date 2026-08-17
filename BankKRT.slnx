@@ -4,6 +4,7 @@
     <Project Path="src/BankKRT.Application/BankKRT.Application.csproj" />
     <Project Path="src/BankKRT.Domain/BankKRT.Domain.csproj" />
     <Project Path="src/BankKRT.Infrastructure/BankKRT.Infrastructure.csproj" />
+    <Project Path="src/BankKRT.Shared/BankKRT.Shared.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/BankKRT.IntegrationTests/BankKRT.IntegrationTests.csproj" />

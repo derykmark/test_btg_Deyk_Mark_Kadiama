@@ -11,6 +11,8 @@ using BankKRT.Domain.Interfaces;
 using BankKRT.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
+using BankKRT.Shared.Logging;
 
 namespace BankKRT.Application.Services;
 
@@ -19,30 +21,38 @@ public class AccountService : IAccountService
     private readonly IAccountRepository _accountRepository;
     private readonly IMediator _mediator;
     private readonly IMemoryCache _cache;
+    private readonly ILogger<AccountService> _logger;
 
     public AccountService(
         IAccountRepository accountRepository,
         IMediator mediator,
-        IMemoryCache cache)
+        IMemoryCache cache,
+        ILogger<AccountService> logger)
     {
         _accountRepository = accountRepository;
         _mediator = mediator;
         _cache = cache;
+        _logger = logger;
     }
 
     public async Task<AccountResponse> CreateAsync(CreateAccountRequest request)
     {
         var cpf = CPF.Create(request.Cpf);
-        
-        var existingAccount = await _accountRepository.GetByCpfAsync(cpf);
+
+        _logger.LogInformation("Creating account for CPF {Cpf}", CpfMasking.Mask((string)cpf));
+
+        var existingAccount = await _accountRepository.GetByCpfAsync((string)cpf);
         if (existingAccount != null)
         {
+            _logger.LogWarning("Attempt to create account with existing CPF {Cpf}", CpfMasking.Mask((string)cpf));
             throw new InvalidOperationException("CPF already in use.");
         }
 
         var account = Account.Create(request.HolderName, cpf);
-        
+
         await _accountRepository.AddAsync(account);
+
+        _logger.LogInformation("Account {AccountId} created for CPF {Cpf}", account.Id, CpfMasking.Mask((string)account.Cpf));
 
         await _mediator.Publish(new AccountCreatedEvent(
             account.Id,
@@ -56,17 +66,17 @@ public class AccountService : IAccountService
     public async Task<AccountResponse?> GetByIdAsync(int id)
     {
         var cacheKey = $"account:{id}";
-        
+
         if (!_cache.TryGetValue(cacheKey, out AccountResponse? response))
         {
             var account = await _accountRepository.GetByIdAsync(id);
             if (account == null) return null;
 
             response = MapToResponse(account);
-            
+
             var today = DateTime.Today;
             var endOfDay = today.AddDays(1).AddTicks(-1);
-            
+
             var cacheEntryOptions = new MemoryCacheEntryOptions()
                 .SetAbsoluteExpiration(endOfDay);
 
@@ -107,7 +117,7 @@ public class AccountService : IAccountService
         await _accountRepository.UpdateAsync(account);
 
         _cache.Remove($"account:{id}");
-        
+
         await _mediator.Publish(new AccountUpdatedEvent(
             account.Id,
             account.HolderName,

@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\BankKRT.Application\BankKRT.Application.csproj" />
     <ProjectReference Include="..\..\src\BankKRT.Domain\BankKRT.Domain.csproj" />
+    <ProjectReference Include="..\..\src\BankKRT.Shared\BankKRT.Shared.csproj" />
   </ItemGroup>
 
 </Project>

@@ -17,6 +17,7 @@ public class AccountServiceTests
     private readonly Mock<IAccountRepository> _repositoryMock;
     private readonly Mock<IMediator> _mediatorMock;
     private readonly IMemoryCache _memoryCache;
+    private readonly Mock<Microsoft.Extensions.Logging.ILogger<AccountService>> _loggerMock;
     private readonly AccountService _service;
 
     public AccountServiceTests()
@@ -24,7 +25,8 @@ public class AccountServiceTests
         _repositoryMock = new Mock<IAccountRepository>();
         _mediatorMock = new Mock<IMediator>();
         _memoryCache = new MemoryCache(new MemoryCacheOptions());
-        _service = new AccountService(_repositoryMock.Object, _mediatorMock.Object, _memoryCache);
+        _loggerMock = new Mock<Microsoft.Extensions.Logging.ILogger<AccountService>>();
+        _service = new AccountService(_repositoryMock.Object, _mediatorMock.Object, _memoryCache, _loggerMock.Object);
     }
 
     [Fact]

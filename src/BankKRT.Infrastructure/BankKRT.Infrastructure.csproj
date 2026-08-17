@@ -13,12 +13,14 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BankKRT.Application\BankKRT.Application.csproj" />
     <ProjectReference Include="..\BankKRT.Domain\BankKRT.Domain.csproj" />
+    <ProjectReference Include="..\BankKRT.Shared\BankKRT.Shared.csproj" />
   </ItemGroup>
 
 </Project>
