@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BankKRT.API/BankKRT.API.csproj" />
+    <Project Path="src/BankKRT.Application/BankKRT.Application.csproj" />
+    <Project Path="src/BankKRT.Domain/BankKRT.Domain.csproj" />
+    <Project Path="src/BankKRT.Infrastructure/BankKRT.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/BankKRT.IntegrationTests/BankKRT.IntegrationTests.csproj" />
+    <Project Path="tests/BankKRT.UnitTests/BankKRT.UnitTests.csproj" />
+  </Folder>
+</Solution>
